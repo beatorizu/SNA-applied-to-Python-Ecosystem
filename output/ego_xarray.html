@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #111111;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-openpyxl", "label": "types-openpyxl", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-requests", "label": "types-requests", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-pexpect", "label": "types-pexpect", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scipy-stubs", "label": "scipy-stubs", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "numpy", "label": "numpy", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "dask", "label": "dask", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandas-stubs", "label": "pandas-stubs", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-python-dateutil", "label": "types-python-dateutil", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "packaging", "label": "packaging", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandera", "label": "pandera", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "netcdf4", "label": "netcdf4", "shape": "dot", "size": 20}, {"color": "#FF4444", "font": {"color": "white"}, "id": "xarray", "label": "xarray", "shape": "dot", "size": 60, "title": "Biblioteca analisada"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pydap", "label": "pydap", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sparse", "label": "sparse", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "opt-einsum", "label": "opt-einsum", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "fsspec", "label": "fsspec", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "zarr", "label": "zarr", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "h5netcdf", "label": "h5netcdf", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-pygments", "label": "types-pygments", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "cftime", "label": "cftime", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-setuptools", "label": "types-setuptools", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandas", "label": "pandas", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-decorator", "label": "types-decorator", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "numbagg", "label": "numbagg", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-pytz", "label": "types-pytz", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-defusedxml", "label": "types-defusedxml", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "bottleneck", "label": "bottleneck", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "flox", "label": "flox", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "matplotlib", "label": "matplotlib", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "cartopy", "label": "cartopy", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-psutil", "label": "types-psutil", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-pycurl", "label": "types-pycurl", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-xlrd", "label": "types-xlrd", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-docutils", "label": "types-docutils", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-networkx", "label": "types-networkx", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "nc-time-axis", "label": "nc-time-axis", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-colorama", "label": "types-colorama", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scipy", "label": "scipy", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "types-pyyaml", "label": "types-pyyaml", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "seaborn", "label": "seaborn", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "numba", "label": "numba", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pooch", "label": "pooch", "shape": "dot", "size": 20}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "dask", "to": "fsspec"}, {"arrows": "to", "from": "dask", "to": "packaging"}, {"arrows": "to", "from": "dask", "to": "numpy"}, {"arrows": "to", "from": "dask", "to": "dask"}, {"arrows": "to", "from": "dask", "to": "pandas"}, {"arrows": "to", "from": "pandas-stubs", "to": "numpy"}, {"arrows": "to", "from": "pandera", "to": "packaging"}, {"arrows": "to", "from": "pandera", "to": "numpy"}, {"arrows": "to", "from": "pandera", "to": "pandas"}, {"arrows": "to", "from": "pandera", "to": "scipy"}, {"arrows": "to", "from": "pandera", "to": "pandas-stubs"}, {"arrows": "to", "from": "pandera", "to": "scipy-stubs"}, {"arrows": "to", "from": "pandera", "to": "dask"}, {"arrows": "to", "from": "pandera", "to": "xarray"}, {"arrows": "to", "from": "xarray", "to": "numpy"}, {"arrows": "to", "from": "xarray", "to": "packaging"}, {"arrows": "to", "from": "xarray", "to": "pandas"}, {"arrows": "to", "from": "xarray", "to": "scipy"}, {"arrows": "to", "from": "xarray", "to": "bottleneck"}, {"arrows": "to", "from": "xarray", "to": "numbagg"}, {"arrows": "to", "from": "xarray", "to": "numba"}, {"arrows": "to", "from": "xarray", "to": "flox"}, {"arrows": "to", "from": "xarray", "to": "opt-einsum"}, {"arrows": "to", "from": "xarray", "to": "xarray"}, {"arrows": "to", "from": "xarray", "to": "netcdf4"}, {"arrows": "to", "from": "xarray", "to": "h5netcdf"}, {"arrows": "to", "from": "xarray", "to": "pydap"}, {"arrows": "to", "from": "xarray", "to": "zarr"}, {"arrows": "to", "from": "xarray", "to": "fsspec"}, {"arrows": "to", "from": "xarray", "to": "cftime"}, {"arrows": "to", "from": "xarray", "to": "pooch"}, {"arrows": "to", "from": "xarray", "to": "sparse"}, {"arrows": "to", "from": "xarray", "to": "dask"}, {"arrows": "to", "from": "xarray", "to": "cartopy"}, {"arrows": "to", "from": "xarray", "to": "matplotlib"}, {"arrows": "to", "from": "xarray", "to": "nc-time-axis"}, {"arrows": "to", "from": "xarray", "to": "seaborn"}, {"arrows": "to", "from": "xarray", "to": "pandas-stubs"}, {"arrows": "to", "from": "xarray", "to": "scipy-stubs"}, {"arrows": "to", "from": "xarray", "to": "types-colorama"}, {"arrows": "to", "from": "xarray", "to": "types-decorator"}, {"arrows": "to", "from": "xarray", "to": "types-defusedxml"}, {"arrows": "to", "from": "xarray", "to": "types-docutils"}, {"arrows": "to", "from": "xarray", "to": "types-networkx"}, {"arrows": "to", "from": "xarray", "to": "types-openpyxl"}, {"arrows": "to", "from": "xarray", "to": "types-pexpect"}, {"arrows": "to", "from": "xarray", "to": "types-psutil"}, {"arrows": "to", "from": "xarray", "to": "types-pycurl"}, {"arrows": "to", "from": "xarray", "to": "types-pygments"}, {"arrows": "to", "from": "xarray", "to": "types-python-dateutil"}, {"arrows": "to", "from": "xarray", "to": "types-pytz"}, {"arrows": "to", "from": "xarray", "to": "types-pyyaml"}, {"arrows": "to", "from": "xarray", "to": "types-requests"}, {"arrows": "to", "from": "xarray", "to": "types-setuptools"}, {"arrows": "to", "from": "xarray", "to": "types-xlrd"}, {"arrows": "to", "from": "h5netcdf", "to": "packaging"}, {"arrows": "to", "from": "h5netcdf", "to": "numpy"}, {"arrows": "to", "from": "h5netcdf", "to": "netcdf4"}, {"arrows": "to", "from": "cftime", "to": "numpy"}, {"arrows": "to", "from": "pandas", "to": "numpy"}, {"arrows": "to", "from": "pandas", "to": "bottleneck"}, {"arrows": "to", "from": "pandas", "to": "numba"}, {"arrows": "to", "from": "pandas", "to": "scipy"}, {"arrows": "to", "from": "pandas", "to": "xarray"}, {"arrows": "to", "from": "pandas", "to": "fsspec"}, {"arrows": "to", "from": "pandas", "to": "matplotlib"}, {"arrows": "to", "from": "scipy", "to": "numpy"}, {"arrows": "to", "from": "scipy", "to": "pooch"}, {"arrows": "to", "from": "scipy", "to": "matplotlib"}, {"arrows": "to", "from": "scipy", "to": "types-psutil"}, {"arrows": "to", "from": "pooch", "to": "packaging"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -8000,
+            "springConstant": 0.001,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

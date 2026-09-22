@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #111111;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#4FC3F7", "font": {"color": "white"}, "id": "pillow", "label": "pillow", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinx", "label": "sphinx", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinx-prompt", "label": "sphinx-prompt", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scikit-image", "label": "scikit-image", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "cython", "label": "cython", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pyarrow", "label": "pyarrow", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pyamg", "label": "pyamg", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "numpy", "label": "numpy", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "causallib", "label": "causallib", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "mypy", "label": "mypy", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinxext-opengraph", "label": "sphinxext-opengraph", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinxcontrib-sass", "label": "sphinxcontrib-sass", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "umap-learn", "label": "umap-learn", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "memory-profiler", "label": "memory-profiler", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "numpydoc", "label": "numpydoc", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinx-design", "label": "sphinx-design", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "nltk", "label": "nltk", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pytest", "label": "pytest", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "joblib", "label": "joblib", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "skops", "label": "skops", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pynndescent", "label": "pynndescent", "shape": "dot", "size": 20}, {"color": "#FF4444", "font": {"color": "white"}, "id": "scikit-learn", "label": "scikit-learn", "shape": "dot", "size": 60, "title": "Biblioteca analisada"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "hyperopt", "label": "hyperopt", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "plotly", "label": "plotly", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandas", "label": "pandas", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "meson-python", "label": "meson-python", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "conda-lock", "label": "conda-lock", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "matplotlib", "label": "matplotlib", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "polars", "label": "polars", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "ruff", "label": "ruff", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "shap", "label": "shap", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "towncrier", "label": "towncrier", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scipy", "label": "scipy", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pytest-cov", "label": "pytest-cov", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "seaborn", "label": "seaborn", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "imbalanced-learn", "label": "imbalanced-learn", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinx-remove-toctrees", "label": "sphinx-remove-toctrees", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pydata-sphinx-theme", "label": "pydata-sphinx-theme", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "threadpoolctl", "label": "threadpoolctl", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinx-copybutton", "label": "sphinx-copybutton", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sphinx-gallery", "label": "sphinx-gallery", "shape": "dot", "size": 20}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pooch", "label": "pooch", "shape": "dot", "size": 20}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "scikit-image", "to": "numpy"}, {"arrows": "to", "from": "scikit-image", "to": "scipy"}, {"arrows": "to", "from": "scikit-image", "to": "pillow"}, {"arrows": "to", "from": "scikit-image", "to": "meson-python"}, {"arrows": "to", "from": "scikit-image", "to": "cython"}, {"arrows": "to", "from": "scikit-image", "to": "pooch"}, {"arrows": "to", "from": "scikit-image", "to": "scikit-image"}, {"arrows": "to", "from": "scikit-image", "to": "sphinx"}, {"arrows": "to", "from": "scikit-image", "to": "sphinx-gallery"}, {"arrows": "to", "from": "scikit-image", "to": "numpydoc"}, {"arrows": "to", "from": "scikit-image", "to": "sphinx-copybutton"}, {"arrows": "to", "from": "scikit-image", "to": "matplotlib"}, {"arrows": "to", "from": "scikit-image", "to": "pandas"}, {"arrows": "to", "from": "scikit-image", "to": "seaborn"}, {"arrows": "to", "from": "scikit-image", "to": "plotly"}, {"arrows": "to", "from": "scikit-image", "to": "scikit-learn"}, {"arrows": "to", "from": "scikit-image", "to": "sphinx-design"}, {"arrows": "to", "from": "scikit-image", "to": "pydata-sphinx-theme"}, {"arrows": "to", "from": "scikit-image", "to": "pyamg"}, {"arrows": "to", "from": "scikit-image", "to": "pytest"}, {"arrows": "to", "from": "scikit-image", "to": "pytest-cov"}, {"arrows": "to", "from": "causallib", "to": "pandas"}, {"arrows": "to", "from": "causallib", "to": "scipy"}, {"arrows": "to", "from": "causallib", "to": "numpy"}, {"arrows": "to", "from": "causallib", "to": "scikit-learn"}, {"arrows": "to", "from": "causallib", "to": "matplotlib"}, {"arrows": "to", "from": "causallib", "to": "sphinx"}, {"arrows": "to", "from": "umap-learn", "to": "numpy"}, {"arrows": "to", "from": "umap-learn", "to": "scipy"}, {"arrows": "to", "from": "umap-learn", "to": "scikit-learn"}, {"arrows": "to", "from": "umap-learn", "to": "pynndescent"}, {"arrows": "to", "from": "umap-learn", "to": "pandas"}, {"arrows": "to", "from": "umap-learn", "to": "matplotlib"}, {"arrows": "to", "from": "umap-learn", "to": "seaborn"}, {"arrows": "to", "from": "umap-learn", "to": "scikit-image"}, {"arrows": "to", "from": "umap-learn", "to": "pytest"}, {"arrows": "to", "from": "nltk", "to": "joblib"}, {"arrows": "to", "from": "nltk", "to": "numpy"}, {"arrows": "to", "from": "nltk", "to": "scikit-learn"}, {"arrows": "to", "from": "nltk", "to": "scipy"}, {"arrows": "to", "from": "nltk", "to": "matplotlib"}, {"arrows": "to", "from": "skops", "to": "numpy"}, {"arrows": "to", "from": "skops", "to": "scikit-learn"}, {"arrows": "to", "from": "skops", "to": "scipy"}, {"arrows": "to", "from": "pynndescent", "to": "scikit-learn"}, {"arrows": "to", "from": "pynndescent", "to": "scipy"}, {"arrows": "to", "from": "pynndescent", "to": "joblib"}, {"arrows": "to", "from": "pynndescent", "to": "pytest"}, {"arrows": "to", "from": "scikit-learn", "to": "numpy"}, {"arrows": "to", "from": "scikit-learn", "to": "scipy"}, {"arrows": "to", "from": "scikit-learn", "to": "joblib"}, {"arrows": "to", "from": "scikit-learn", "to": "threadpoolctl"}, {"arrows": "to", "from": "scikit-learn", "to": "cython"}, {"arrows": "to", "from": "scikit-learn", "to": "meson-python"}, {"arrows": "to", "from": "scikit-learn", "to": "matplotlib"}, {"arrows": "to", "from": "scikit-learn", "to": "pandas"}, {"arrows": "to", "from": "scikit-learn", "to": "memory-profiler"}, {"arrows": "to", "from": "scikit-learn", "to": "scikit-image"}, {"arrows": "to", "from": "scikit-learn", "to": "seaborn"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinx"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinx-copybutton"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinx-gallery"}, {"arrows": "to", "from": "scikit-learn", "to": "numpydoc"}, {"arrows": "to", "from": "scikit-learn", "to": "pillow"}, {"arrows": "to", "from": "scikit-learn", "to": "pooch"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinx-prompt"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinxext-opengraph"}, {"arrows": "to", "from": "scikit-learn", "to": "plotly"}, {"arrows": "to", "from": "scikit-learn", "to": "polars"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinx-design"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinxcontrib-sass"}, {"arrows": "to", "from": "scikit-learn", "to": "pydata-sphinx-theme"}, {"arrows": "to", "from": "scikit-learn", "to": "sphinx-remove-toctrees"}, {"arrows": "to", "from": "scikit-learn", "to": "towncrier"}, {"arrows": "to", "from": "scikit-learn", "to": "pytest"}, {"arrows": "to", "from": "scikit-learn", "to": "pytest-cov"}, {"arrows": "to", "from": "scikit-learn", "to": "ruff"}, {"arrows": "to", "from": "scikit-learn", "to": "mypy"}, {"arrows": "to", "from": "scikit-learn", "to": "pyamg"}, {"arrows": "to", "from": "scikit-learn", "to": "pyarrow"}, {"arrows": "to", "from": "scikit-learn", "to": "conda-lock"}, {"arrows": "to", "from": "hyperopt", "to": "numpy"}, {"arrows": "to", "from": "hyperopt", "to": "scipy"}, {"arrows": "to", "from": "hyperopt", "to": "scikit-learn"}, {"arrows": "to", "from": "hyperopt", "to": "pytest"}, {"arrows": "to", "from": "pandas", "to": "numpy"}, {"arrows": "to", "from": "pandas", "to": "pytest"}, {"arrows": "to", "from": "pandas", "to": "pyarrow"}, {"arrows": "to", "from": "pandas", "to": "scipy"}, {"arrows": "to", "from": "pandas", "to": "matplotlib"}, {"arrows": "to", "from": "polars", "to": "numpy"}, {"arrows": "to", "from": "polars", "to": "pandas"}, {"arrows": "to", "from": "polars", "to": "polars"}, {"arrows": "to", "from": "polars", "to": "pyarrow"}, {"arrows": "to", "from": "polars", "to": "matplotlib"}, {"arrows": "to", "from": "shap", "to": "numpy"}, {"arrows": "to", "from": "shap", "to": "scipy"}, {"arrows": "to", "from": "shap", "to": "scikit-learn"}, {"arrows": "to", "from": "shap", "to": "pandas"}, {"arrows": "to", "from": "shap", "to": "matplotlib"}, {"arrows": "to", "from": "shap", "to": "numpydoc"}, {"arrows": "to", "from": "shap", "to": "sphinx"}, {"arrows": "to", "from": "shap", "to": "pytest"}, {"arrows": "to", "from": "shap", "to": "pytest-cov"}, {"arrows": "to", "from": "shap", "to": "mypy"}, {"arrows": "to", "from": "scipy", "to": "numpy"}, {"arrows": "to", "from": "scipy", "to": "pytest"}, {"arrows": "to", "from": "scipy", "to": "pytest-cov"}, {"arrows": "to", "from": "scipy", "to": "threadpoolctl"}, {"arrows": "to", "from": "scipy", "to": "pooch"}, {"arrows": "to", "from": "scipy", "to": "cython"}, {"arrows": "to", "from": "scipy", "to": "sphinx"}, {"arrows": "to", "from": "scipy", "to": "pydata-sphinx-theme"}, {"arrows": "to", "from": "scipy", "to": "sphinx-copybutton"}, {"arrows": "to", "from": "scipy", "to": "sphinx-design"}, {"arrows": "to", "from": "scipy", "to": "matplotlib"}, {"arrows": "to", "from": "scipy", "to": "numpydoc"}, {"arrows": "to", "from": "scipy", "to": "mypy"}, {"arrows": "to", "from": "scipy", "to": "ruff"}, {"arrows": "to", "from": "imbalanced-learn", "to": "numpy"}, {"arrows": "to", "from": "imbalanced-learn", "to": "scipy"}, {"arrows": "to", "from": "imbalanced-learn", "to": "scikit-learn"}, {"arrows": "to", "from": "imbalanced-learn", "to": "joblib"}, {"arrows": "to", "from": "imbalanced-learn", "to": "threadpoolctl"}, {"arrows": "to", "from": "imbalanced-learn", "to": "pandas"}, {"arrows": "to", "from": "imbalanced-learn", "to": "matplotlib"}, {"arrows": "to", "from": "imbalanced-learn", "to": "seaborn"}, {"arrows": "to", "from": "imbalanced-learn", "to": "memory-profiler"}, {"arrows": "to", "from": "imbalanced-learn", "to": "numpydoc"}, {"arrows": "to", "from": "imbalanced-learn", "to": "sphinx"}, {"arrows": "to", "from": "imbalanced-learn", "to": "sphinx-gallery"}, {"arrows": "to", "from": "imbalanced-learn", "to": "sphinx-copybutton"}, {"arrows": "to", "from": "imbalanced-learn", "to": "pydata-sphinx-theme"}, {"arrows": "to", "from": "imbalanced-learn", "to": "sphinx-design"}, {"arrows": "to", "from": "imbalanced-learn", "to": "ruff"}, {"arrows": "to", "from": "imbalanced-learn", "to": "pytest"}, {"arrows": "to", "from": "imbalanced-learn", "to": "pytest-cov"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -8000,
+            "springConstant": 0.001,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

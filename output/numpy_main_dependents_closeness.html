@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #111111;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FF4444", "font": {"color": "white"}, "id": "numpy", "label": "numpy", "shape": "dot", "size": 60, "title": "Biblioteca analisada: numpy"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scipy", "label": "scipy", "shape": "dot", "size": 20, "title": "scipy\u003cbr\u003eDegree: 56"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandas", "label": "pandas", "shape": "dot", "size": 20, "title": "pandas\u003cbr\u003eDegree: 55"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "shap", "label": "shap", "shape": "dot", "size": 20, "title": "shap\u003cbr\u003eDegree: 52"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scikit-image", "label": "scikit-image", "shape": "dot", "size": 20, "title": "scikit-image\u003cbr\u003eDegree: 51"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "lancedb", "label": "lancedb", "shape": "dot", "size": 20, "title": "lancedb\u003cbr\u003eDegree: 47"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "xarray", "label": "xarray", "shape": "dot", "size": 20, "title": "xarray\u003cbr\u003eDegree: 44"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "scikit-learn", "label": "scikit-learn", "shape": "dot", "size": 20, "title": "scikit-learn\u003cbr\u003eDegree: 42"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "trimesh", "label": "trimesh", "shape": "dot", "size": 20, "title": "trimesh\u003cbr\u003eDegree: 41"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "thinc", "label": "thinc", "shape": "dot", "size": 20, "title": "thinc\u003cbr\u003eDegree: 36"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "polars", "label": "polars", "shape": "dot", "size": 20, "title": "polars\u003cbr\u003eDegree: 31"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "dask", "label": "dask", "shape": "dot", "size": 20, "title": "dask\u003cbr\u003eDegree: 29"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "imbalanced-learn", "label": "imbalanced-learn", "shape": "dot", "size": 20, "title": "imbalanced-learn\u003cbr\u003eDegree: 29"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "statsmodels", "label": "statsmodels", "shape": "dot", "size": 20, "title": "statsmodels\u003cbr\u003eDegree: 26"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandera", "label": "pandera", "shape": "dot", "size": 20, "title": "pandera\u003cbr\u003eDegree: 26"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "umap-learn", "label": "umap-learn", "shape": "dot", "size": 20, "title": "umap-learn\u003cbr\u003eDegree: 18"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandas-gbq", "label": "pandas-gbq", "shape": "dot", "size": 20, "title": "pandas-gbq\u003cbr\u003eDegree: 16"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "sacrebleu", "label": "sacrebleu", "shape": "dot", "size": 20, "title": "sacrebleu\u003cbr\u003eDegree: 16"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "hyperopt", "label": "hyperopt", "shape": "dot", "size": 20, "title": "hyperopt\u003cbr\u003eDegree: 16"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "causallib", "label": "causallib", "shape": "dot", "size": 20, "title": "causallib\u003cbr\u003eDegree: 13"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "nltk", "label": "nltk", "shape": "dot", "size": 20, "title": "nltk\u003cbr\u003eDegree: 12"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "albumentations", "label": "albumentations", "shape": "dot", "size": 20, "title": "albumentations\u003cbr\u003eDegree: 11"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "h5netcdf", "label": "h5netcdf", "shape": "dot", "size": 20, "title": "h5netcdf\u003cbr\u003eDegree: 8"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "coremltools", "label": "coremltools", "shape": "dot", "size": 20, "title": "coremltools\u003cbr\u003eDegree: 8"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "skops", "label": "skops", "shape": "dot", "size": 20, "title": "skops\u003cbr\u003eDegree: 6"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "soxr", "label": "soxr", "shape": "dot", "size": 20, "title": "soxr\u003cbr\u003eDegree: 6"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "ortools", "label": "ortools", "shape": "dot", "size": 20, "title": "ortools\u003cbr\u003eDegree: 6"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "patsy", "label": "patsy", "shape": "dot", "size": 20, "title": "patsy\u003cbr\u003eDegree: 5"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "autograd", "label": "autograd", "shape": "dot", "size": 20, "title": "autograd\u003cbr\u003eDegree: 5"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pandas-stubs", "label": "pandas-stubs", "shape": "dot", "size": 20, "title": "pandas-stubs\u003cbr\u003eDegree: 3"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "fasttext-wheel", "label": "fasttext-wheel", "shape": "dot", "size": 20, "title": "fasttext-wheel\u003cbr\u003eDegree: 3"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pyreadstat", "label": "pyreadstat", "shape": "dot", "size": 20, "title": "pyreadstat\u003cbr\u003eDegree: 3"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "fasttext-numpy2", "label": "fasttext-numpy2", "shape": "dot", "size": 20, "title": "fasttext-numpy2\u003cbr\u003eDegree: 3"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "h5py", "label": "h5py", "shape": "dot", "size": 20, "title": "h5py\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "opencv-python", "label": "opencv-python", "shape": "dot", "size": 20, "title": "opencv-python\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "opencv-python-headless", "label": "opencv-python-headless", "shape": "dot", "size": 20, "title": "opencv-python-headless\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "blis", "label": "blis", "shape": "dot", "size": 20, "title": "blis\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "ultralytics-thop", "label": "ultralytics-thop", "shape": "dot", "size": 20, "title": "ultralytics-thop\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "cftime", "label": "cftime", "shape": "dot", "size": 20, "title": "cftime\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "graphframes", "label": "graphframes", "shape": "dot", "size": 20, "title": "graphframes\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "pyloudnorm", "label": "pyloudnorm", "shape": "dot", "size": 20, "title": "pyloudnorm\u003cbr\u003eDegree: 2"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "biopython", "label": "biopython", "shape": "dot", "size": 20, "title": "biopython\u003cbr\u003eDegree: 1"}, {"color": "#4FC3F7", "font": {"color": "white"}, "id": "opencv-contrib-python", "label": "opencv-contrib-python", "shape": "dot", "size": 20, "title": "opencv-contrib-python\u003cbr\u003eDegree: 1"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "scipy", "to": "numpy"}, {"arrows": "to", "from": "pandas", "to": "numpy"}, {"arrows": "to", "from": "shap", "to": "numpy"}, {"arrows": "to", "from": "scikit-image", "to": "numpy"}, {"arrows": "to", "from": "lancedb", "to": "numpy"}, {"arrows": "to", "from": "xarray", "to": "numpy"}, {"arrows": "to", "from": "scikit-learn", "to": "numpy"}, {"arrows": "to", "from": "trimesh", "to": "numpy"}, {"arrows": "to", "from": "thinc", "to": "numpy"}, {"arrows": "to", "from": "polars", "to": "numpy"}, {"arrows": "to", "from": "dask", "to": "numpy"}, {"arrows": "to", "from": "imbalanced-learn", "to": "numpy"}, {"arrows": "to", "from": "statsmodels", "to": "numpy"}, {"arrows": "to", "from": "pandera", "to": "numpy"}, {"arrows": "to", "from": "umap-learn", "to": "numpy"}, {"arrows": "to", "from": "pandas-gbq", "to": "numpy"}, {"arrows": "to", "from": "sacrebleu", "to": "numpy"}, {"arrows": "to", "from": "hyperopt", "to": "numpy"}, {"arrows": "to", "from": "causallib", "to": "numpy"}, {"arrows": "to", "from": "nltk", "to": "numpy"}, {"arrows": "to", "from": "albumentations", "to": "numpy"}, {"arrows": "to", "from": "h5netcdf", "to": "numpy"}, {"arrows": "to", "from": "coremltools", "to": "numpy"}, {"arrows": "to", "from": "skops", "to": "numpy"}, {"arrows": "to", "from": "soxr", "to": "numpy"}, {"arrows": "to", "from": "ortools", "to": "numpy"}, {"arrows": "to", "from": "patsy", "to": "numpy"}, {"arrows": "to", "from": "autograd", "to": "numpy"}, {"arrows": "to", "from": "pandas-stubs", "to": "numpy"}, {"arrows": "to", "from": "fasttext-wheel", "to": "numpy"}, {"arrows": "to", "from": "pyreadstat", "to": "numpy"}, {"arrows": "to", "from": "fasttext-numpy2", "to": "numpy"}, {"arrows": "to", "from": "h5py", "to": "numpy"}, {"arrows": "to", "from": "opencv-python", "to": "numpy"}, {"arrows": "to", "from": "opencv-python-headless", "to": "numpy"}, {"arrows": "to", "from": "blis", "to": "numpy"}, {"arrows": "to", "from": "ultralytics-thop", "to": "numpy"}, {"arrows": "to", "from": "cftime", "to": "numpy"}, {"arrows": "to", "from": "graphframes", "to": "numpy"}, {"arrows": "to", "from": "pyloudnorm", "to": "numpy"}, {"arrows": "to", "from": "biopython", "to": "numpy"}, {"arrows": "to", "from": "opencv-contrib-python", "to": "numpy"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 250,
+            "springConstant": 0.05,
+            "springLength": 250
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
